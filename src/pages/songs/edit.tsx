@@ -4,6 +4,7 @@ import Skeleton from "@/components/Skeleton";
 import SongEditForm, { type ISongEditInput } from "@/components/editsongs";
 import { getSongDetails, type SongResponse } from "@/services/songService";
 import { useParams } from "react-router-dom";
+import PagesLayout from "@/layouts/pagesLayout";
 
 
 const EditSong: React.FC = () => {
@@ -23,7 +24,7 @@ const EditSong: React.FC = () => {
     });
 
 
-   
+
 
 
     if (isLoading) return <div><Skeleton /></div>;
@@ -32,23 +33,13 @@ const EditSong: React.FC = () => {
 
 
     return (
-        <div className="flex items-center justify-center  bg-gray-100">
+        <PagesLayout title="Edit Song" actions={<BackButton />}>
+            {!song && <>No song found</>}
+            {song &&
+                <SongEditForm defaultValue={{ ...song } as ISongEditInput} />
+            }
+        </PagesLayout>
 
-            <div className="w-full max-w-5xl p-8 bg-white rounded-lg shadow-md">
-                <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-3xl font-bold text-gray-800">Edit User</h1>
-
-                    <BackButton />
-
-                </div>
-                {!song && <>No song found</>}
-
-                {song && 
-                
-                <SongEditForm defaultValue={{...song} as ISongEditInput}/>
-                }
-            </div>
-        </div>
     );
 };
 

@@ -11,6 +11,7 @@ import { useConfirm } from "@/context/ConfirmContext";
 import { Button } from "@/components/ui/button";
 import CSVImportModal from "@/components/CSVUploader";
 import api from "@/services/APIRequest";
+import PagesLayout from "@/layouts/pagesLayout";
 
 
 const ArtistList: React.FC = () => {
@@ -83,40 +84,40 @@ const ArtistList: React.FC = () => {
                             <Eye size={16} />
                         </Link>
                         {(user?.role === 'artist_manager') &&
-                        <>
-                        <Link
-                            to={`/artists/${artist.id}/edit`}
-                            className="text-blue-600 hover:text-blue-800"
-                        >
-                            <Edit size={16} />
-                        </Link>
-                         <button
-                            onClick={() =>
-                                confirm({
-                                    title: "Delete Artist",
-                                    message:
-                                        "Are you sure you want to delete this Artist? This action cannot be undone.All the songs of this artist will also be removed",
-                                    confirmText: "Delete",
-                                    cancelText: "Cancel",
-                                    onConfirm: async () => {
-                                        await deleteArtist(artist.id);
-                                        toast.success("Artist Deleted Successfully!");
-                                        await fetchData(
-                                            pagination.page,
-                                            pagination.per_page
-                                        );
-                                    },
-                                })
-                            }
-                            className="text-red-600 hover:text-red-800"
-                        >
-                            <Trash2 size={16} />
-                        </button>
-                        </>
+                            <>
+                                <Link
+                                    to={`/artists/${artist.id}/edit`}
+                                    className="text-green-600 hover:text-green-800"
+                                >
+                                    <Edit size={16} />
+                                </Link>
+                                <button
+                                    onClick={() =>
+                                        confirm({
+                                            title: "Delete Artist",
+                                            message:
+                                                "Are you sure you want to delete this Artist? This action cannot be undone.All the songs of this artist will also be removed",
+                                            confirmText: "Delete",
+                                            cancelText: "Cancel",
+                                            onConfirm: async () => {
+                                                await deleteArtist(artist.id);
+                                                toast.success("Artist Deleted Successfully!");
+                                                await fetchData(
+                                                    pagination.page,
+                                                    pagination.per_page
+                                                );
+                                            },
+                                        })
+                                    }
+                                    className="text-red-600 hover:text-red-800"
+                                >
+                                    <Trash2 size={16} />
+                                </button>
+                            </>
                         }
 
-                        
-                       
+
+
                     </div>
                 ),
             }));
@@ -136,82 +137,73 @@ const ArtistList: React.FC = () => {
 
 
     const handleExport = async () => {
-       
 
-        
-            try {
-                const blob = await api.get(`/artists/export`);
-                
-                if (blob.data) {
-                    const url = window.URL.createObjectURL(new Blob([blob.data]));
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'artists.csv';
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
 
-                 toast.success("Artist Exported Successfully!");
-                }
-            } catch (error) {
-                console.error("Failed to export the artists:", error);
+
+        try {
+            const blob = await api.get(`/artists/export`);
+
+            if (blob.data) {
+                const url = window.URL.createObjectURL(new Blob([blob.data]));
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'artists.csv';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+
+                toast.success("Artist Exported Successfully!");
             }
+        } catch (error) {
+            console.error("Failed to export the artists:", error);
         }
-        
-    
+    }
+
+
 
     return (
 
-        <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8 px-4">
-            <div className="w-full max-w-6xl">
-                <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-3xl font-bold text-gray-800">Artists List</h1>
-                    <div className="flex gap-2">
-                        {(user?.role === 'artist_manager') &&
-                            <>
-                                <Button
-                                    variant={"destructive"}
-                                    className=""
-                                    onClick={() => setIsModalOpen(true)}
-                                >
-                                    Import CSV
-                                </Button>
-
-                               
-                                <CSVImportModal
-                                    isOpen={isModalOpen}
-                                    onClose={() => setIsModalOpen(false)}
-                                    uploadUrl="/artists/import" 
-                                />
-
-                                
-                                <Button onClick={handleExport} 
-                                    variant={"secondary"}
-                                className="">
-                                    Export CSV
-                                </Button>
-                                
-                                <Link to="/artists/create">
-                                    <Button className="px-4 py-2">
-                                        Add New Artist
-                                    </Button>
-                                </Link>
-                            </>}
-                    </div>
-                </div>
+        <PagesLayout title="Artists List" actions={<div className="flex gap-2">
+            {(user?.role === 'artist_manager') &&
+                <>
+                    <Button
+                        variant={"outline"}
+                        className=""
+                        onClick={() => setIsModalOpen(true)}
+                    >
+                        Import CSV
+                    </Button>
 
 
-                <div className="w-full p-4 space-y-6 bg-white rounded-lg shadow-md">
-                    <Datatable
-                        columns={columns}
-                        data={data}
-                        loading={loading}
-                        pagination={pagination}
-                        onFetch={fetchData}
+                    <CSVImportModal
+                        isOpen={isModalOpen}
+                        onClose={() => setIsModalOpen(false)}
+                        uploadUrl="/artists/import"
                     />
-                </div>
-            </div>
-        </div>
+
+
+                    <Button onClick={handleExport}
+                        className="bg-green-400">
+                        Export CSV
+                    </Button>
+
+                    <Link to="/artists/create">
+                        <Button className="px-4 py-2">
+                            Add New 
+                        </Button>
+                    </Link>
+                </>}
+        </div>}>
+            <Datatable
+                columns={columns}
+                data={data}
+                loading={loading}
+                pagination={pagination}
+                onFetch={fetchData}
+            />
+        </PagesLayout>
+
+
     );
 };
 

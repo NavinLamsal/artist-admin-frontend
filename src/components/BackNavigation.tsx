@@ -1,5 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "./ui/button";
+import { MoveLeft } from "lucide-react";
 
 interface BackButtonProps {
   to?: string;
@@ -27,12 +29,13 @@ const BackButton: React.FC<BackButtonProps> = ({
   };
 
   return (
-    <button
+    <Button
+      variant={"outline"}
       onClick={handleClick}
-      className={`px-4 py-2 border border-indigo-500 text-indigo-500 rounded-lg hover:bg-indigo-50 focus:ring focus:ring-indigo-200 transition-colors ${className}`}
+      className={` ${className}`}
     >
-      {children}
-    </button>
+      <MoveLeft/>{children}
+    </Button>
   );
 };
 

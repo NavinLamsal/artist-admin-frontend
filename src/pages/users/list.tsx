@@ -4,9 +4,11 @@ import { Link } from "react-router-dom";
 import Datatable from "@/components/Datatable";
 import { listUsers, deleteUser } from "@/services/userService";
 import { toast } from "react-toastify";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, Plus, Trash2 } from "lucide-react";
 import type { User } from "@/types/User";
 import { useConfirm } from "@/context/ConfirmContext";
+import { Button } from "@/components/ui/button";
+import PagesLayout from "@/layouts/pagesLayout";
 
 const UserList: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -14,7 +16,7 @@ const UserList: React.FC = () => {
   const [pagination, setPagination] = useState({
     page: 1,
     pages: 1,
-    per_page: 10,
+    per_page: 1,
     total: 0,
   });
 
@@ -32,7 +34,7 @@ const UserList: React.FC = () => {
   ];
 
   const fetchData = useCallback(
-    async (page = 1, per_page = 10, search = "") => {
+    async (page = 1, per_page = 1, search = "") => {
       setLoading(true);
       try {
         const params = {
@@ -73,7 +75,7 @@ const UserList: React.FC = () => {
             <div className="flex justify-center items-center space-x-4">
               <Link
                 to={`/users/${user.id}/edit`}
-                className="text-blue-600 hover:text-blue-800"
+                className="text-green-600 hover:text-green-800"
               >
                 <Edit size={16} />
               </Link>
@@ -121,28 +123,23 @@ const UserList: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8 px-4">
-      <div className="w-full max-w-6xl">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">Users List</h1>
-          <Link to="/users/create">
-            <button className="px-4 py-2 text-white bg-indigo-500 rounded-lg hover:bg-indigo-600 focus:ring focus:ring-indigo-200">
-              Add New User
-            </button>
-          </Link>
-        </div>
-
-        <div className="w-full p-4 space-y-6 bg-white rounded-lg shadow-md">
-          <Datatable
-            columns={columns}
-            data={data}
-            loading={loading}
-            pagination={pagination}
-            onFetch={fetchData}
-          />
-        </div>
-      </div>
-    </div>
+    <PagesLayout
+      title="Users List"
+      actions={
+        <Link to="/users/create">
+          <Button>Add New</Button>
+        </Link>
+      }
+    >
+      <Datatable
+        columns={columns}
+        data={data}
+        loading={loading}
+        pagination={pagination}
+        onFetch={fetchData}
+      />
+    </PagesLayout>
+   
   );
 };
 

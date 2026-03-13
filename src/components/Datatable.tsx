@@ -1,3 +1,4 @@
+import { MoveLeft, MoveRight } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export interface Column<T> {
@@ -41,7 +42,7 @@ export default function DataTable<T>({
 
   const { page: currentPage, pages: totalPages, per_page } = pagination;
 
-  
+
   useEffect(() => {
     const handler = setTimeout(
       () => setDebouncedSearch(searchQuery),
@@ -75,55 +76,77 @@ export default function DataTable<T>({
     onFetch(1, newPerPage, debouncedSearch);
   };
 
- 
-  const pageNumbers: number[] = [];
-  if (totalPages <= 3) {
-    for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
-  } else {
-    pageNumbers.push(1);
-    for (
-      let i = Math.max(2, currentPage - 1);
-      i <= Math.min(totalPages - 1, currentPage + 1);
-      i++
-    )
-      pageNumbers.push(i);
-    if (!pageNumbers.includes(totalPages)) pageNumbers.push(totalPages);
-  }
+
+  const getPageNumbers = () => {
+    const pages: (number | string)[] = [];
+    const delta = 1;
+
+    if (totalPages <= 4) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      pages.push(1);
+
+      if (currentPage - delta > 2) pages.push("…");
+
+      for (let i = Math.max(2, currentPage - delta); i <= Math.min(totalPages - 1, currentPage + delta); i++) {
+        pages.push(i);
+      }
+
+      if (currentPage + delta < totalPages - 1) pages.push("…");
+
+      pages.push(totalPages);
+    }
+
+    return pages;
+  };
+
+  const pageNumbers = getPageNumbers();
 
   return (
     <div className="w-full">
       <div className="mb-4 flex justify-between items-center">
-        {showSearch && 
-        <input
-          type="text"
-          placeholder="Search..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="border rounded px-3 py-1"
-        />
+        {showSearch &&
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="border rounded px-3 py-1"
+          />
         }
-        {showPerPage &&
-        <select
-          value={per_page}
+        {/* <select
+          value={sorting}
           onChange={(e) => handlePerPageChange(parseInt(e.target.value))}
           className="border rounded px-3 py-1"
         >
           {[5, 10, 25, 50].map((num) => (
             <option key={num} value={num}>
-              {num} per page
+              {num}
             </option>
           ))}
-        </select>
-}
+        </select> */}
+        {showPerPage &&
+          <select
+            value={per_page}
+            onChange={(e) => handlePerPageChange(parseInt(e.target.value))}
+            className="border rounded px-3 py-1"
+          >
+            {[5, 10, 25, 50].map((num) => (
+              <option key={num} value={num}>
+                {num}
+              </option>
+            ))}
+          </select>
+        }
       </div>
 
-      <table className="w-full border-collapse border">
+      <table className="w-full border-collapse border text-sm">
         <thead>
           <tr>
             {columns.map((col) => (
               <th
                 key={String(col.data)}
-                className="border px-4 py-2 text-left bg-sidebar text-sidebar-foreground whitespace-nowrap"
+                className="border px-4 py-2 text-left bg-primary text-primary-foreground whitespace-nowrap"
               >
                 {col.label}
               </th>
@@ -157,40 +180,46 @@ export default function DataTable<T>({
           )}
         </tbody>
       </table>
-        {showPagination &&
-        
-      <div className="mt-4 flex justify-between items-center">
-        <button
-          onClick={handlePreviousPage}
-          disabled={currentPage === 1}
-          className="px-3 py-1 border rounded disabled:opacity-50"
-        >
-          Prev
-        </button>
+      {showPagination &&
 
-        <div className="space-x-2">
-          {pageNumbers.map((num) => (
-            <button
-              key={num}
-              onClick={() => handlePageChange(num)}
-              className={`px-3 py-1 border rounded ${
-                num === currentPage ? "bg-blue-500 text-white" : ""
-              }`}
-            >
-              {num}
-            </button>
-          ))}
+        <div className="mt-4 flex justify-between items-center">
+          <button
+            onClick={handlePreviousPage}
+            disabled={currentPage === 1}
+            className="px-3 py-1 border rounded disabled:opacity-50"
+          >
+            <MoveLeft />
+          </button>
+
+          <div className="space-x-2">
+            {pageNumbers.map((num, idx) =>
+              num === "…" ? (
+                <span key={idx} className="px-3 py-1">
+                  …
+                </span>
+              ) : (
+                <button
+                  key={num}
+                  onClick={() => handlePageChange(num as number)}
+                  className={`px-3 py-1 border rounded ${num === currentPage ? "bg-primary text-primary-foreground" : ""
+                    }`}
+                >
+                  {num}
+                </button>
+              )
+            )}
+          </div>
+
+
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages || totalPages === 0}
+            className="px-3 py-1 border rounded disabled:opacity-50"
+          >
+            <MoveRight />
+          </button>
         </div>
-
-        <button
-          onClick={handleNextPage}
-          disabled={currentPage === totalPages || totalPages === 0}
-          className="px-3 py-1 border rounded disabled:opacity-50"
-        >
-          Next
-        </button>
-      </div>
-}
+      }
     </div>
   );
 }

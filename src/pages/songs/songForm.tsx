@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { PlusCircleIcon, Trash } from "lucide-react";
+import { PlusCircleIcon, Sidebar, Trash } from "lucide-react";
 import {
   BulkMusicSchema,
   GENRES,
@@ -12,6 +12,7 @@ import {
 } from "@/lib/validators/music-validators";
 
 import { createSongs } from "@/services/songService";
+import { Button } from "@/components/ui/button";
 
 export interface IMusicInput {
   title: string;
@@ -25,9 +26,10 @@ export interface IFormInput {
 
 interface SongFormProps {
   artist_id: string;
+  showheader?: boolean
 }
 
-const SongForm: React.FC<SongFormProps> = ({ artist_id }) => {
+const SongForm: React.FC<SongFormProps> = ({ artist_id, showheader=false }) => {
   const navigate = useNavigate();
 
   const {
@@ -70,26 +72,15 @@ const SongForm: React.FC<SongFormProps> = ({ artist_id }) => {
   };
 
   return (
-    <div className="flex items-center justify-center  bg-gray-100">
-      <div className="w-full max-w-3xl p-8 bg-white rounded-lg shadow-md">
-
-        <h2 className="mb-6 text-xl font-semibold">Add Songs</h2>
-
+    <div className="flex items-center justify-start">
+      <div className="w-full max-w-2xl p-8 bg-white rounded-lg ">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-
+          {showheader &&
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-medium">Musics</h3>
+             <h3 className="text-lg font-medium">Musics</h3>
 
-            <button
-              type="button"
-              onClick={() =>
-                append({ title: "", album_name: "", genre: "rnb" })
-              }
-              className="text-indigo-600 hover:text-indigo-800"
-            >
-              <PlusCircleIcon size={18} />
-            </button>
-          </div>
+            
+          </div>}
 
           {fields.map((field, index) => (
             <div
@@ -148,27 +139,43 @@ const SongForm: React.FC<SongFormProps> = ({ artist_id }) => {
               </div>
 
            
-              <div className="flex items-center col-span-2">
-                <button
+              <div className="flex items-center justify-end col-span-2 gap-2">
+                {fields.length > 1 && 
+                <Button
                   type="button"
                   onClick={() => remove(index)}
-                  className="text-red-600 hover:text-red-800"
+                  variant={"destructive"}
+                  size={"icon-sm"}
                 >
                   <Trash size={18} />
-                </button>
+                </Button>
+                }
+                {index === fields.length - 1 &&
+                
+                <Button
+              type="button"
+              onClick={() =>
+                append({ title: "", album_name: "", genre: "rnb" })
+              }
+              size={"icon-sm"}
+              className="bg-green-600 hover:bg-green-800"
+            >
+              <PlusCircleIcon size={18} />
+            </Button>
+                }
               </div>
-
             </div>
           ))}
 
-          <div className="text-right">
-            <button
+
+          <div className="flex items-center justify-end gap-2">
+            <Button
               type="submit"
               disabled={mutation.isPending}
-              className="px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
+              
             >
-              {mutation.isPending ? "Submitting..." : "Add Songs"}
-            </button>
+              {mutation.isPending ? "Submitting..." : "Submit"}
+            </Button>
           </div>
 
         </form>
