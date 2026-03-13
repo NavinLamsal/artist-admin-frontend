@@ -45,9 +45,8 @@ const SongEditForm: React.FC<SongEditFormProps> = ({ defaultValue }) => {
   };
 
   return (
-    <div className="flex items-center justify-center">
-      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
-        <h2 className="mb-6 text-xl font-semibold">Edit Song</h2>
+    <div className="flex items-center justify-start">
+      <div className="w-full max-w-md ">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
           <div>

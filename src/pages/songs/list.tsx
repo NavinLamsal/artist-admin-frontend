@@ -8,6 +8,8 @@ import { Edit, Trash2 } from "lucide-react";
 import { useConfirm } from "@/context/ConfirmContext";
 import { deleteSong, listSongs } from "@/services/songService";
 import { Link } from "react-router-dom";
+import PagesLayout from "@/layouts/pagesLayout";
+import { Button } from "@/components/ui/button";
 
 const SongsList: React.FC = () => {
     const [loading, setLoading] = useState(true);
@@ -53,7 +55,7 @@ const SongsList: React.FC = () => {
                         <div className="flex justify-center items-center space-x-4">
                             <Link
                                 to={"/songs/" + song.id + "/edit"}
-                                className="text-blue-600 hover:text-blue-800"
+                                className="text-green-600 hover:text-green-800"
                             >
                                 <Edit size={16} />
                             </Link>
@@ -100,33 +102,21 @@ const SongsList: React.FC = () => {
     }, [fetchData]);
 
     return (
-        <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8 px-4">
-            <div className="w-full max-w-6xl">
-                <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-3xl font-bold text-gray-800">Songs List</h1>
-                    {user?.role === "artist" && (
-                        <Link
-                            to="/songs/create"
-                            className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
-                        >
-                            Create Song
-                        </Link>
-                    )}
-                </div>
+        <PagesLayout title="Songs List" actions={<>{user?.role === "artist" && (
+            <Link to="/songs/create">
+                <Button>Add New</Button>
+            </Link>
 
-                <div className="w-full p-4 space-y-6 bg-white rounded-lg shadow-md">
-                    <Datatable
-                        columns={columns}
-                        data={data}
-                        loading={loading}
-                        pagination={pagination}
-                        onFetch={fetchData}
-                    />
-                </div>
-            </div>
+        )}</>} >
+            <Datatable
+                columns={columns}
+                data={data}
+                loading={loading}
+                pagination={pagination}
+                onFetch={fetchData}
+            />
 
-            
-        </div>
+        </PagesLayout>
     );
 };
 

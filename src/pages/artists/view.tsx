@@ -8,6 +8,7 @@ import DataTable from "@/components/Datatable";
 import { Edit } from "lucide-react";
 import Skeleton from "@/components/Skeleton";
 import { useUserContext } from "@/context/UserContext";
+import PagesLayout from "@/layouts/pagesLayout";
 
 const ViewArtist: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -54,7 +55,7 @@ const ViewArtist: React.FC = () => {
                 {user?.role === 'artist' &&
                     <Link
                         to={`/songs/${song.id}/edit`}
-                        className="text-blue-600 hover:text-blue-800"
+                        className="text-green-600 hover:text-green-800"
                     >
                         <Edit size={16} />
                     </Link>
@@ -65,17 +66,9 @@ const ViewArtist: React.FC = () => {
 
 
     return (
-        <div className="flex justify-center min-h-screen bg-gray-100 p-6">
-            <div className="w-full max-w-6xl bg-white rounded-lg shadow-md p-8 space-y-10">
-
-                {/* Header */}
-                <div className="flex justify-between items-center">
-                    <h1 className="text-3xl font-bold">Artist Details</h1>
-                    <BackButton />
-                </div>
-
-                {/* Artist Information */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <PagesLayout title="Artist Details" actions={<BackButton />}>
+            {/* Artist Information */}
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
 
                     <Info label="Name" value={artist.name} />
                     <Info label="Gender" value={artist.gender} />
@@ -91,15 +84,13 @@ const ViewArtist: React.FC = () => {
                     />
                     <Info label="Albums Released" value={artist.no_of_albums_released} />
                     <Info label="Songs Released" value={artist.music_count} />
-                    <Info label="Registed on" value={artist.created_at} />
-                    <Info label="last updated on" value={artist.updated_at} />
 
                 </div>
 
                 {/* Divider */}
                 <div className="border-t pt-8">
 
-                    {user?.role === "artist" && id && <SongForm artist_id={id} />}
+                    {user?.role === "artist" && id && <SongForm artist_id={id} showheader={true}/>}
 
                     <DataTable
                         columns={columns}
@@ -118,8 +109,8 @@ const ViewArtist: React.FC = () => {
                     />
 
                 </div>
-            </div>
-        </div>
+        </PagesLayout>
+        
     );
 };
 
@@ -133,6 +124,6 @@ interface InfoProps {
 const Info: React.FC<InfoProps> = ({ label, value }) => (
     <div>
         <p className="text-sm text-gray-500">{label}</p>
-        <p className="text-lg font-medium text-gray-800">{value}</p>
+        <p className="text-sm font-medium text-gray-800">{value}</p>
     </div>
 );

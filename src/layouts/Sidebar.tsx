@@ -17,7 +17,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen }) => {
   );
 
   return (
-    <aside className={`w-64 bg-sidebar text-sidebar-foreground border-r border-sidebar-border fixed top-0 left-0 h-full transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-64'}`}>
+    <aside className={`w-48 bg-sidebar text-sidebar-foreground border-r border-sidebar-border fixed top-0 left-0 h-full transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-64'}`}>
       <div className="flex flex-col h-full">
         <div className="items-center justify-center h-16 bg-sidebar-primary hidden sm:flex">
           <ComputerIcon className="w-6 h-6 mr-3" />Logo

@@ -5,6 +5,7 @@ import { useUserContext } from "@/context/UserContext";
 import { useQuery } from "@tanstack/react-query";
 import { getArtistDetailsByUserId } from "@/services/artistService";
 import Skeleton from "@/components/Skeleton";
+import PagesLayout from "@/layouts/pagesLayout";
 
 
 
@@ -27,16 +28,13 @@ const CreateSong: React.FC = () => {
     if (error) return <div className="p-6">Failed to load artist</div>;
 
     return (
-        <div className="flex flex-col items-center  bg-gray-100">
-            <div className="flex justify-between items-center w-full">
-                <h1 className="text-3xl font-bold text-gray-800">Songs create</h1>
-                <BackButton />
-            </div>
-            <div className="flex justify-between items-center mb-6">
-            </div>
+        <PagesLayout title="Create Song" actions={<BackButton />} >
+        
+            
             {data?.data.artist.id && 
             <SongForm artist_id={`${data?.data.artist.id}`} />}
-        </div>
+        
+        </PagesLayout>
     );
 };
 

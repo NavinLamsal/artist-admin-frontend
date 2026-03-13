@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackNavigation";
+import PagesLayout from "@/layouts/pagesLayout";
 
 interface IFormInput {
     first_name: string;
@@ -68,15 +69,8 @@ const CreateUser: React.FC = () => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="w-full p-8 space-y-6 bg-white rounded-lg shadow-md">
-                <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-3xl font-bold text-gray-800">Users List</h1>
-
-                    <BackButton />
-
-                </div>
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <PagesLayout title="Create User" actions={<BackButton />}>
+<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div>
                             <label className="block mb-1 text-sm font-medium">First Name</label>
@@ -223,8 +217,8 @@ const CreateUser: React.FC = () => {
                         </Button>
                     </div>
                 </form>
-            </div>
-        </div>
+         </PagesLayout>   
+        
     );
 };
 

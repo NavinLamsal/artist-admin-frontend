@@ -12,6 +12,7 @@ import type { User } from "@/types/User";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackNavigation";
 import Skeleton from "@/components/Skeleton";
+import PagesLayout from "@/layouts/pagesLayout";
 
 interface IFormInput {
     first_name: string;
@@ -70,7 +71,7 @@ const EditUser: React.FC = () => {
 
     useEffect(() => {
         if (userData) {
-            
+
             const { id, created_at, updated_at, ...users } = userData.data.user
             reset({
                 ...users,
@@ -124,150 +125,147 @@ const EditUser: React.FC = () => {
 
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <PagesLayout
+            title="Edit User"
+            actions={
+                <BackButton />
+            }
+        >
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-            <div className="w-full max-w-5xl p-8 bg-white rounded-lg shadow-md">
-                <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-3xl font-bold text-gray-800">Edit User</h1>
-
-                    <BackButton />
-
-                </div>
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-                        <div>
-                            <label className="block mb-1 text-sm font-medium">
-                                First Name
-                            </label>
-                            <input
-                                {...register("first_name")}
-                                className="w-full px-4 py-2 text-sm border rounded-lg"
-                            />
-                            {errors.first_name && (
-                                <p className="text-sm text-red-500">
-                                    {errors.first_name.message}
-                                </p>
-                            )}
-                        </div>
+                    <div>
+                        <label className="block mb-1 text-sm font-medium">
+                            First Name
+                        </label>
+                        <input
+                            {...register("first_name")}
+                            className="w-full px-4 py-2 text-sm border rounded-lg"
+                        />
+                        {errors.first_name && (
+                            <p className="text-sm text-red-500">
+                                {errors.first_name.message}
+                            </p>
+                        )}
+                    </div>
 
 
-                        <div>
-                            <label className="block mb-1 text-sm font-medium">
-                                Last Name
-                            </label>
-                            <input
-                                {...register("last_name")}
-                                className="w-full px-4 py-2 text-sm border rounded-lg"
-                            />
-                            {errors.last_name && (
-                                <p className="text-sm text-red-500">
-                                    {errors.last_name.message}
-                                </p>
-                            )}
-                        </div>
+                    <div>
+                        <label className="block mb-1 text-sm font-medium">
+                            Last Name
+                        </label>
+                        <input
+                            {...register("last_name")}
+                            className="w-full px-4 py-2 text-sm border rounded-lg"
+                        />
+                        {errors.last_name && (
+                            <p className="text-sm text-red-500">
+                                {errors.last_name.message}
+                            </p>
+                        )}
+                    </div>
 
 
-                        <div>
-                            <label className="block mb-1 text-sm font-medium">
-                                Email
-                            </label>
-                            <input
-                                readOnly
-                                type="email"
-                                {...register("email")}
-                                className="w-full px-4 py-2 text-sm border rounded-lg bg-gray-100"
-                            />
-                        </div>
+                    <div>
+                        <label className="block mb-1 text-sm font-medium">
+                            Email
+                        </label>
+                        <input
+                            readOnly
+                            type="email"
+                            {...register("email")}
+                            className="w-full px-4 py-2 text-sm border rounded-lg bg-gray-100"
+                        />
+                    </div>
 
 
-                        <div>
-                            <label className="block mb-1 text-sm font-medium">
-                                Date of Birth
-                            </label>
-                            <input
-                                type="date"
-                                {...register("dob")}
-                                className="w-full px-4 py-2 text-sm border rounded-lg"
-                            />
-                            {errors.dob && (
-                                <p className="text-sm text-red-500">
-                                    {errors.dob.message}
-                                </p>
-                            )}
-                        </div>
+                    <div>
+                        <label className="block mb-1 text-sm font-medium">
+                            Date of Birth
+                        </label>
+                        <input
+                            type="date"
+                            {...register("dob")}
+                            className="w-full px-4 py-2 text-sm border rounded-lg"
+                        />
+                        {errors.dob && (
+                            <p className="text-sm text-red-500">
+                                {errors.dob.message}
+                            </p>
+                        )}
+                    </div>
 
 
-                        <div>
-                            <label className="block mb-1 text-sm font-medium">
-                                Gender
-                            </label>
-                            <div className="flex space-x-4">
-                                {["m", "f", "o"].map((g) => (
-                                    <label key={g} className="flex items-center space-x-2">
-                                        <input
-                                            type="radio"
-                                            value={g}
-                                            {...register("gender")}
-                                        />
-                                        <span>
-                                            {g === "m"
-                                                ? "Male"
-                                                : g === "f"
-                                                    ? "Female"
-                                                    : "Other"}
-                                        </span>
-                                    </label>
-                                ))}
-                            </div>
-                        </div>
-
-
-                        <div>
-                            <label className="block mb-1 text-sm font-medium">
-                                Address
-                            </label>
-                            <input
-                                {...register("address")}
-                                className="w-full px-4 py-2 text-sm border rounded-lg"
-                            />
-                            {errors.address && (
-                                <p className="text-sm text-red-500">
-                                    {errors.address.message}
-                                </p>
-                            )}
-                        </div>
-
-
-                        <div>
-                            <label className="block mb-1 text-sm font-medium">
-                                Role
-                            </label>
-                            <select
-                                {...register("role")}
-                                className="w-full px-4 py-2 text-sm border rounded-lg"
-                            >
-                                <option value="super_admin">Super Admin</option>
-                                <option value="artist_manager">Artist Manager</option>
-                                <option value="artist">Artist</option>
-                            </select>
+                    <div>
+                        <label className="block mb-1 text-sm font-medium">
+                            Gender
+                        </label>
+                        <div className="flex space-x-4">
+                            {["m", "f", "o"].map((g) => (
+                                <label key={g} className="flex items-center space-x-2">
+                                    <input
+                                        type="radio"
+                                        value={g}
+                                        {...register("gender")}
+                                    />
+                                    <span>
+                                        {g === "m"
+                                            ? "Male"
+                                            : g === "f"
+                                                ? "Female"
+                                                : "Other"}
+                                    </span>
+                                </label>
+                            ))}
                         </div>
                     </div>
 
-                    <div className="text-right">
-                        <Button
-                            type="submit"
-                            disabled={mutation.isPending}
-                            className=""
+
+                    <div>
+                        <label className="block mb-1 text-sm font-medium">
+                            Address
+                        </label>
+                        <input
+                            {...register("address")}
+                            className="w-full px-4 py-2 text-sm border rounded-lg"
+                        />
+                        {errors.address && (
+                            <p className="text-sm text-red-500">
+                                {errors.address.message}
+                            </p>
+                        )}
+                    </div>
+
+
+                    <div>
+                        <label className="block mb-1 text-sm font-medium">
+                            Role
+                        </label>
+                        <select
+                            {...register("role")}
+                            className="w-full px-4 py-2 text-sm border rounded-lg"
                         >
-                            {mutation.isPending
-                                ? "Updating..."
-                                : "Update User"}
-                        </Button>
+                            <option value="super_admin">Super Admin</option>
+                            <option value="artist_manager">Artist Manager</option>
+                            <option value="artist">Artist</option>
+                        </select>
                     </div>
-                </form>
-            </div>
-        </div>
+                </div>
+
+                <div className="text-right">
+                    <Button
+                        type="submit"
+                        disabled={mutation.isPending}
+                        className=""
+                    >
+                        {mutation.isPending
+                            ? "Updating..."
+                            : "Update User"}
+                    </Button>
+                </div>
+            </form>
+        </PagesLayout>
+
     );
 };
 

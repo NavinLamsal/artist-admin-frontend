@@ -43,10 +43,10 @@ const Navbar = ({ setIsSidebarOpen }: NavbarProps) => {
             </div>
 
             <div className="relative">
-                <button
-                    onClick={() => setIsProfileMenuOpen(prev => !prev)}
-                    type="button"
-                    className="flex items-center p-2 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors duration-200 ease-in-out"
+                <div
+                    // onClick={() => setIsProfileMenuOpen(prev => !prev)}
+                    // type="button"
+                    className="flex items-center p-2 text-gray-600 rounded-lg gap-2"
                 >
                 
                     <User className="w-10 h-10 rounded-full border-2 border-gray-300" />
@@ -54,27 +54,17 @@ const Navbar = ({ setIsSidebarOpen }: NavbarProps) => {
                         <span className="block font-semibold text-gray-800">{user?.first_name + ' ' + user?.last_name}</span>
                         <span className="block text-sm text-gray-500">{user?.role === 'super_admin' ? 'Super Admin' : user?.role === 'artist_manager' ? 'Artist Manager' : "Artist"}</span>
                     </div>
-                </button>
-
-                <div className={`absolute right-0 mt-2 w-48 bg-navbar-accent-foreground text-navbar-accent border border-navbar-border rounded shadow-lg ${isProfileMenuOpen ? 'block' : 'hidden'}`}>
-                    <ul className='p-0.5'>
-                        <li>
-                            <Link to="/manage-account" className="block px-4 py-2 text-navbar-accent hover:bg-navbar-primary hover:text-navbar-primary-foreground">
-                                <User className="inline mr-2" />
-                                Manage Account
-                            </Link>
-                        </li>
-                        <li>
-                            <Button
+                    <Button
                                 onClick={handleLogout}
-                                className="block px-4 py-2  w-full text-left"
+                                variant={"destructive"}
+                                size={"icon-sm"}
+                                className='cursor-pointer'
                             >
-                                <LogOutIcon className="inline mr-2" />
-                                Logout
+                                <LogOutIcon className="inline" />
                             </Button>
-                        </li>
-                    </ul>
                 </div>
+
+                
             </div>
         </nav>
     );
